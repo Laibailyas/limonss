@@ -1,0 +1,605 @@
+/* =====================================================================
+   LIMONS - BRAND UI LAYER  (loads last, after motion.css)
+   1. Brand-primary colour for every button + menu
+   2. Bottom -> top "liquid fill" hover animation for every button
+   3. Slower, smoother header / dropdown / mobile-menu motion
+   4. Smooth card entrances (no jerk) + product-page entrance helpers
+   Brand palette: #680202 primary · #9A1E23 red · #F3A5AD pink
+                  #1A0A0B ink · #F7F4F1 paper   (font: Poppins)
+   ===================================================================== */
+
+:root {
+  --brand-primary: #680202;
+  --brand-red: #9A1E23;
+  --brand-pink: #F3A5AD;
+  --brand-ink: #1A0A0B;
+  --brand-paper: #F7F4F1;
+
+  /* button fill timing - change this one value to speed up / slow down */
+  --btn-fill-time: .55s;
+  --btn-fill-ease: cubic-bezier(.22, .61, .36, 1);
+
+  /* header / menu timing (slower & smoother) */
+  --menu-time: .75s;
+  --menu-ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+/* =====================================================================
+   1 + 2. BUTTONS
+   ===================================================================== */
+
+/* every button-like element in the site */
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal,
+    .btn-start-project, .btn-workflow-start,
+    .form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_) {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff !important;
+  background-image: none !important;
+  transition:
+    color .45s var(--btn-fill-ease),
+    border-color .5s var(--btn-fill-ease),
+    box-shadow .5s var(--btn-fill-ease),
+    transform .35s var(--btn-fill-ease) !important;
+}
+
+/* the rising fill (curved/wavy edge that flattens as it climbs) */
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal,
+    .btn-start-project, .btn-workflow-start,
+    .form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_)::before {
+  content: "";
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -2px;
+  height: 0;
+  z-index: -1;
+  background: var(--btn-fill, linear-gradient(0deg, #680202 0%, #9A1E23 100%));
+  border-radius: 58% 42% 0 0 / 120% 90% 0 0;
+  transition:
+    height var(--btn-fill-time) var(--btn-fill-ease),
+    border-radius var(--btn-fill-time) var(--btn-fill-ease);
+  pointer-events: none;
+}
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal,
+    .btn-start-project, .btn-workflow-start,
+    .form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_):hover::before,
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal,
+    .btn-start-project, .btn-workflow-start,
+    .form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_):focus-visible::before {
+  height: 150%;
+  border-radius: 0;
+}
+
+/* ---- OUTLINE tier: dark-maroon tint, brand-red outline, fills with red ---- */
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal):not(#_) {
+  --btn-fill: linear-gradient(0deg, #680202 0%, #9A1E23 100%);
+  background-color: rgba(104, 2, 2, .30) !important;
+  border-color: #9A1E23 !important;
+  box-shadow: none !important;
+}
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal):not(#_):hover,
+:is(.cta, .btn-contact, .mobile-contact, .gh-modal-btn,
+    .form-row-buttons .btn-start, .filter-btn, .btn-expand-modal):not(#_):focus-visible {
+  background-color: rgba(104, 2, 2, .30) !important;
+  border-color: #F3A5AD !important;
+  box-shadow: 0 10px 28px rgba(154, 30, 35, .42) !important;
+}
+
+/* ---- SOLID tier: primary maroon, fills with brand red ---- */
+:is(.form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_) {
+  --btn-fill: linear-gradient(0deg, #9A1E23 0%, #b32a30 100%);
+  background-color: #680202 !important;
+  border: 1.5px solid #9A1E23 !important;
+  box-shadow: 0 8px 24px rgba(104, 2, 2, .45) !important;
+}
+:is(.form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_):hover,
+:is(.form-row-buttons .btn-demo, .btn-send, .btn-describe-project, .btn-modal-inquire):not(#_):focus-visible {
+  background-color: #680202 !important;
+  border-color: #F3A5AD !important;
+  box-shadow: 0 12px 32px rgba(154, 30, 35, .5) !important;
+}
+
+/* active filter pill (our-apps) = fully filled */
+.filter-btn.filter-btn.active:not(#_) {
+  background-color: #9A1E23 !important;
+  border-color: #F3A5AD !important;
+  box-shadow: 0 6px 18px rgba(154, 30, 35, .45) !important;
+}
+
+/* gentle lift only (the fill is the hero of the interaction) */
+.mo-btn:hover { transform: translateY(-2px) !important; }
+
+/* the generic wipe that some pages add to every <button>: brand colour, not pink */
+html body button:not(.mobile-toggle):not(.app-card-action):not(.modal-close-btn):hover,
+html body button:not(.mobile-toggle):not(.app-card-action):not(.modal-close-btn):focus-visible,
+html body a[class*="btn"]:not(.link-process):hover,
+html body a[class*="btn"]:not(.link-process):focus-visible {
+  background-image: linear-gradient(#9A1E23, #9A1E23) !important;
+}
+
+/* ensure case study action button stays cleanly styled on text only */
+.app-card-action,
+.app-card-action:hover,
+.app-card-action:focus-visible {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  width: fit-content !important;
+  align-self: flex-start !important;
+}
+
+/* text-link style button */
+.btn-read-more { color: #F3A5AD !important; }
+.btn-read-more:hover { color: #fff !important; }
+
+/* mobile hamburger */
+.mobile-toggle {
+  background: rgba(104, 2, 2, .88) !important;
+  border-color: #9A1E23 !important;
+}
+
+/* =====================================================================
+   MENUS - primary colour
+   ===================================================================== */
+html body .dropdown-menu,
+html body .gh-modal {
+  background: linear-gradient(165deg, rgba(104, 2, 2, .97) 0%, rgba(46, 6, 9, .98) 55%, rgba(26, 10, 11, .99) 100%) !important;
+  border: 1px solid rgba(154, 30, 35, .75) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .65), 0 0 32px rgba(104, 2, 2, .5) !important;
+}
+html body .dropdown-item:hover {
+  background: rgba(154, 30, 35, .5) !important;
+}
+html body .dropdown-item.active {
+  background: linear-gradient(90deg, rgba(154, 30, 35, .65), rgba(104, 2, 2, .2)) !important;
+  border-left-color: #F3A5AD !important;
+}
+html body .dropdown-item:hover .drop-badge,
+html body .dropdown-item.active .drop-badge {
+  background: linear-gradient(135deg, #9A1E23, #680202) !important;
+  border-color: rgba(243, 165, 173, .55) !important;
+  box-shadow: 0 0 14px rgba(154, 30, 35, .6) !important;
+}
+html body .drop-badge { color: #F3A5AD !important; }
+html body .nav-link:hover,
+html body .nav-link.on {
+  background: rgba(104, 2, 2, .55) !important;
+}
+
+/* =====================================================================
+   3. HEADER / MENU MOTION - slower + smoother
+   ===================================================================== */
+html body .nav-link {
+  transition: color .5s var(--menu-ease), background .6s var(--menu-ease) !important;
+}
+html body .drop-arrow {
+  transition: transform .6s var(--menu-ease) !important;
+}
+
+/* dropdown panel: slow fade + soft rise */
+html body .dropdown-menu {
+  transform: translateX(-50%) translateY(18px);
+  transition:
+    opacity var(--menu-time) var(--menu-ease),
+    transform var(--menu-time) var(--menu-ease),
+    visibility var(--menu-time) var(--menu-ease) !important;
+}
+html body .gh-modal {
+  display: flex !important;
+  flex-direction: column !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(10px) !important;
+  transition: opacity .35s ease, transform .35s ease, visibility .35s !important;
+}
+
+html body .gh-hover:hover .gh-modal,
+html body .gh-hover:focus-within .gh-modal,
+html body .gh-hover.is-open .gh-modal,
+html body .gh-modal:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+/* dropdown rows glide in one after another */
+html body .dropdown-item {
+  transition:
+    background .5s var(--menu-ease),
+    color .5s var(--menu-ease),
+    transform .6s var(--menu-ease) !important;
+}
+@keyframes brandDropItemIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+.nav-item-dropdown:hover .dropdown-item,
+.nav-item-dropdown:focus-within .dropdown-item {
+  animation: brandDropItemIn .75s var(--menu-ease) backwards;
+}
+.nav-item-dropdown:hover .dropdown-item:nth-child(1),
+.nav-item-dropdown:focus-within .dropdown-item:nth-child(1) { animation-delay: .18s; }
+.nav-item-dropdown:hover .dropdown-item:nth-child(2),
+.nav-item-dropdown:focus-within .dropdown-item:nth-child(2) { animation-delay: .30s; }
+.nav-item-dropdown:hover .dropdown-item:nth-child(3),
+.nav-item-dropdown:focus-within .dropdown-item:nth-child(3) { animation-delay: .42s; }
+.nav-item-dropdown:hover .dropdown-item:nth-child(4),
+.nav-item-dropdown:focus-within .dropdown-item:nth-child(4) { animation-delay: .54s; }
+
+/* mobile / tablet full-screen menu: fade in, then items cascade slowly */
+@keyframes brandNavFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.nav.open, .nav-menu.open {
+  animation: brandNavFade .7s var(--menu-ease) backwards;
+}
+.nav.open .nav-link,
+.nav.open .nav-item-dropdown {
+  animation: moMenuItemIn .9s var(--menu-ease) both;
+}
+.nav.open > :nth-child(1) { animation-delay: .22s; }
+.nav.open > :nth-child(2) { animation-delay: .34s; }
+.nav.open > :nth-child(3) { animation-delay: .46s; }
+.nav.open > :nth-child(4) { animation-delay: .58s; }
+.nav.open > :nth-child(5) { animation-delay: .70s; }
+.nav.open > :nth-child(6) { animation-delay: .82s; }
+.nav.open > :nth-child(7) { animation-delay: .94s; }
+.mobile-toggle span { transition: all .6s var(--menu-ease) !important; }
+
+/* header entrance on page load (inner pages that opt in) */
+@keyframes brandHeadIn {
+  from { opacity: 0; translate: 0 -18px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+body[data-mo-entrance] .logo,
+body[data-mo-entrance] .nav,
+body[data-mo-entrance] .header-right {
+  animation: brandHeadIn 1.4s var(--menu-ease) backwards;
+}
+body[data-mo-entrance] .logo         { animation-delay: .15s; }
+body[data-mo-entrance] .nav          { animation-delay: .40s; }
+body[data-mo-entrance] .header-right { animation-delay: .65s; }
+
+/* =====================================================================
+   4. SILKY SMOOTH CARD ENTRANCES  (Ultra-fluid, zero jerk)
+   ===================================================================== */
+
+/* Ultra-smooth physics tokens for card entrance */
+:root {
+  --mo-reveal: 1000ms;
+  --mo-slide-up: 28px;
+  --card-ease-silky: cubic-bezier(0.16, 1, 0.3, 1);
+  --card-entrance-time: 1050ms;
+  --card-slide-y: 20px;
+}
+
+/* Feature note cards & Dashboard point cards initial state (Silky & weightless) */
+.feature-note,
+.dashboard-point {
+  opacity: 0;
+  transform: translate3d(0, var(--card-slide-y), 0);
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:
+    opacity var(--card-entrance-time) var(--card-ease-silky),
+    transform var(--card-entrance-time) var(--card-ease-silky),
+    border-color 0.4s var(--card-ease-silky),
+    box-shadow 0.4s var(--card-ease-silky),
+    background 0.4s var(--card-ease-silky) !important;
+}
+
+/* Entering into view */
+.feature-note.in,
+.dashboard-point.in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* Harmonious stagger timings for feature notes */
+.feature-note.note-1 { transition-delay: 60ms !important; }
+.feature-note.note-2 { transition-delay: 180ms !important; }
+.feature-note.note-3 { transition-delay: 300ms !important; }
+
+/* Harmonious stagger timings for dashboard point cards */
+.dashboard-point:nth-child(1) { transition-delay: 80ms !important; }
+.dashboard-point:nth-child(2) { transition-delay: 200ms !important; }
+.dashboard-point:nth-child(3) { transition-delay: 320ms !important; }
+
+/* After reveal is complete (mo-done), remove transition delays so hover is instant */
+.feature-note.mo-done,
+.dashboard-point.mo-done,
+.mo-reveal.mo-done,
+.mo-dash-point.mo-done,
+.mo-img-reveal.mo-done,
+.mo-note.mo-done,
+.mo-brand-logo.mo-done {
+  transition-delay: 0ms !important;
+}
+
+/* Silky hover animations after card is in */
+.feature-note.left.in:hover {
+  transform: translate3d(-6px, -3px, 0) !important;
+  border-color: rgba(255, 83, 97, .48) !important;
+  background: linear-gradient(145deg, rgba(58, 12, 20, .94), rgba(22, 5, 10, .86)) !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .5), 0 0 32px rgba(255, 83, 97, .25) !important;
+  transition-duration: 0.4s !important;
+}
+
+.feature-note.right.in:hover {
+  transform: translate3d(6px, -3px, 0) !important;
+  border-color: rgba(255, 83, 97, .48) !important;
+  background: linear-gradient(145deg, rgba(58, 12, 20, .94), rgba(22, 5, 10, .86)) !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .5), 0 0 32px rgba(255, 83, 97, .25) !important;
+  transition-duration: 0.4s !important;
+}
+
+.dashboard-point.in:hover {
+  transform: translate3d(0, -6px, 0) !important;
+  border-color: rgba(255, 83, 97, .48) !important;
+  background: linear-gradient(145deg, rgba(58, 12, 20, .94), rgba(22, 5, 10, .86)) !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .5), 0 0 32px rgba(255, 83, 97, .25) !important;
+  transition-duration: 0.4s !important;
+}
+
+@media (max-width: 1120px) {
+  .feature-note.left.in:hover,
+  .feature-note.right.in:hover {
+    transform: translate3d(0, -4px, 0) !important;
+  }
+}
+
+/* CTA band elements smooth cascade */
+.cta-band .band-icon,
+.cta-band h3,
+.cta-band p,
+.form-row-inputs input,
+.form-row-buttons button,
+.form-row-buttons .btn-demo,
+.form-row-buttons .btn-start {
+  will-change: opacity, transform;
+}
+
+.form-row-inputs input.mo-reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.9s var(--card-ease-silky),
+    transform 0.9s var(--card-ease-silky),
+    border-color .2s, background .2s, box-shadow .2s !important;
+}
+.form-row-inputs input.mo-reveal.in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.form-row-inputs input.mo-reveal.mo-done {
+  transition:
+    border-color .2s, background .2s, box-shadow .2s,
+    transform var(--mo-fast) var(--mo-ease-out) !important;
+}
+
+/* Brand logos entrance */
+.brand-strip img.mo-brand-logo {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 0.9s var(--card-ease-silky),
+    transform 0.9s var(--card-ease-silky),
+    filter 0.3s ease !important;
+}
+.brand-strip img.mo-brand-logo.in {
+  opacity: 0.82;
+  transform: translate3d(0, 0, 0);
+}
+.brand-strip img.mo-brand-logo.in:hover {
+  opacity: 1 !important;
+  transform: translate3d(0, -2px, 0) !important;
+}
+
+/* Footer brand logo - exact same size as header logo */
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 14px;
+  text-decoration: none;
+  transition: transform .25s var(--mo-ease-smooth), opacity .25s var(--mo-ease-smooth);
+}
+.footer-logo:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+.footer-logo img,
+.footer-brand img.footer-logo-img {
+  width: 172px !important;
+  height: 52px !important;
+  max-width: calc(100vw - 110px) !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+}
+
+@media (max-width: 820px) {
+  .footer-logo img,
+  .footer-brand img.footer-logo-img {
+    width: 150px !important;
+    height: 46px !important;
+  }
+}
+
+/* ---- Footer Giant Brand Signature Display Sizing (Refined & balanced) ---- */
+html body .cta-brand-display {
+  padding: clamp(16px, 2.5vh, 28px) 0 clamp(24px, 3.5vh, 40px) !important;
+}
+html body .cta-brand-ambient {
+  width: min(520px, 75vw) !important;
+  height: 150px !important;
+}
+html body .cta-brand-link {
+  max-width: clamp(260px, 34vw, 460px) !important;
+  margin: 0 auto !important;
+}
+html body .cta-giant-logo {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* =====================================================================
+   5. MOCKUP BOTTOM-TO-TOP REVEAL ANIMATION (Matching Index.html)
+   Exact signature mechanics from index.html:
+   - Bottom-to-top curtain clip-path unmasking (inset wipe from bottom)
+   - Deep translateY(110px) upward glide
+   - Subtle scale entrance (0.92 -> 1)
+   - Silky cubic-bezier(0.16, 1, 0.3, 1) ease
+   Applies to all product page mockups:
+   - Telly (Hero mockup + 4 feature story mockups)
+   - Veeplay (Hero Media Player mockup + interactive stage)
+   - On-Demand (Hero Red Smartphones mockup + interactive stage)
+   - File Sync (Hero Burgundy Tablet mockup + interactive stage)
+   ===================================================================== */
+:root {
+  --mo-mockup-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --mo-mockup-duration: 1400ms;
+  --mo-mockup-rise: 100px;
+}
+
+/* Feature story mockups (Telly 4 mockups) and feature visual stages (File Sync, On-Demand, Veeplay) */
+.feature-figure,
+.feature-figure.mo-img-reveal,
+.feat-display-stage.mo-mockup-reveal,
+.feat-img-wrap.mo-mockup-reveal,
+.mo-mockup-reveal {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  -webkit-clip-path: inset(100% 0 0 0);
+  transform: translate3d(0, var(--mo-mockup-rise), 0) scale(0.93);
+  will-change: opacity, transform, clip-path;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:
+    opacity 1s var(--mo-mockup-ease),
+    transform var(--mo-mockup-duration) var(--mo-mockup-ease),
+    clip-path var(--mo-mockup-duration) var(--mo-mockup-ease),
+    -webkit-clip-path var(--mo-mockup-duration) var(--mo-mockup-ease) !important;
+}
+
+.feature-figure.in,
+.feature-figure.mo-img-reveal.in,
+.feat-display-stage.mo-mockup-reveal.in,
+.feat-img-wrap.mo-mockup-reveal.in,
+.mo-mockup-reveal.in {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+/* Clear clip-path when animation settles so hover and float effects are completely free */
+.feature-figure.in.mo-done,
+.feat-display-stage.in.mo-done,
+.mo-mockup-reveal.in.mo-done {
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+/* Hero mockups (Desktop) */
+.mock.mo-hero-img,
+.hero-image-wrapper.mock.mo-hero-img {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  -webkit-clip-path: inset(100% 0 0 0);
+  transform: translate3d(0, var(--mo-mockup-rise), 0) scale(0.93);
+  will-change: opacity, transform, clip-path;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:
+    opacity 1s var(--mo-mockup-ease) .2s,
+    transform var(--mo-mockup-duration) var(--mo-mockup-ease) .2s,
+    clip-path var(--mo-mockup-duration) var(--mo-mockup-ease) .2s,
+    -webkit-clip-path var(--mo-mockup-duration) var(--mo-mockup-ease) .2s !important;
+}
+
+.mock.mo-hero-img.in,
+.hero-image-wrapper.mock.mo-hero-img.in {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+.mock.mo-hero-img.in.mo-done,
+.hero-image-wrapper.mock.mo-hero-img.in.mo-done {
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+}
+
+/* Hero mockups (Mobile <= 820px, where .mock is centered via translateX(-50%)) */
+@media (max-width: 820px) {
+  .mock.mo-hero-img,
+  .hero-image-wrapper.mock.mo-hero-img {
+    transform: translate3d(-50%, 80px, 0) scale(0.93) !important;
+  }
+  .mock.mo-hero-img.in,
+  .hero-image-wrapper.mock.mo-hero-img.in {
+    transform: translate3d(-50%, 0, 0) scale(1) !important;
+  }
+}
+
+/* Tab image swap: bottom-to-top glide on image change */
+.feat-large-img {
+  transition:
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.42s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: opacity, transform;
+}
+
+.feat-large-img.fade-out {
+  opacity: 0 !important;
+  transform: translate3d(0, 26px, 0) scale(0.97) !important;
+}
+
+/* =====================================================================
+   LEGAL LINKS IN FOOTER (Terms of Service & Privacy Policy)
+   ===================================================================== */
+.cta-bottom-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cta-legal-links,
+.footer-legal-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cta-legal-links a,
+.footer-legal-links a {
+  color: rgba(255, 255, 255, 0.48) !important;
+  text-decoration: none !important;
+  font-size: 13px !important;
+  transition: color 0.2s ease !important;
+}
+
+.cta-legal-links a:hover,
+.footer-legal-links a:hover {
+  color: #fa4b63 !important;
+}
+
+.cta-legal-sep,
+.footer-legal-sep {
+  color: rgba(255, 255, 255, 0.25) !important;
+  font-size: 12px !important;
+}
