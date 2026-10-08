@@ -627,11 +627,11 @@
     }
 
     /* ==========================================================
-       SECTION 2: STATS & PURPOSE (Our Mission / Our Vision)
+       SECTION 1: STATS & PURPOSE (Our Mission / Our Vision)
     ========================================================== */
     .about-stats-section {
       position: relative;
-      padding: clamp(30px, 4vw, 60px) 0 clamp(90px, 10vw, 140px);
+      padding: clamp(120px, 12vw, 150px) 0 clamp(90px, 10vw, 140px);
       width: 100%;
     }
 
@@ -1590,42 +1590,26 @@
   <!-- MAIN ABOUT CONTENT AREA -->
   <main class="about-main">
 
-    <!-- SECTION 1: HERO / INTRO (Matches uploaded screenshot) -->
-    <section class="about-hero-section" id="about-intro">
-      <div class="about-container">
-
-        <!-- Top Row: Headline & Narrative Statement -->
-        <div class="about-header-row mo mo-fade">
-          <h1 class="about-title">About <span class="about-title-grad">Us</span></h1>
-          <div class="about-lead">
-            <p>We are committed to creating simple and powerful<br class="desktop-br">products that transform ideas into
-              real experiences.<br class="desktop-br">We design, develop, and launch apps that people love.</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SECTION 2: STATS & PURPOSE (Our Mission / Our Vision) -->
+    <!-- SECTION 1: STATS & PURPOSE (Our Mission / Our Vision) -->
     <section class="about-stats-section" id="about-stats">
       <div class="about-container">
 
         <!-- Top Stats Strip: 100+ Apps Built & Launched, 20+ Global Clients, 98% Satisfaction, 4+ Years -->
         <div class="about-stats-grid mo mo-fade">
           <div class="about-stat-item">
-            <div class="about-stat-val">100<span class="accent">+</span></div>
+            <div class="about-stat-val"><span class="about-stat-count" data-count-to="100">100</span><span class="accent">+</span></div>
             <div class="about-stat-lbl">Apps Built &amp; Launched</div>
           </div>
           <div class="about-stat-item">
-            <div class="about-stat-val">20<span class="accent">+</span></div>
+            <div class="about-stat-val"><span class="about-stat-count" data-count-to="20">20</span><span class="accent">+</span></div>
             <div class="about-stat-lbl">Global Clients</div>
           </div>
           <div class="about-stat-item">
-            <div class="about-stat-val">98<span class="accent">%</span></div>
+            <div class="about-stat-val"><span class="about-stat-count" data-count-to="98">98</span><span class="accent">%</span></div>
             <div class="about-stat-lbl">Client Satisfaction Rate</div>
           </div>
           <div class="about-stat-item">
-            <div class="about-stat-val">4<span class="accent">+</span></div>
+            <div class="about-stat-val"><span class="about-stat-count" data-count-to="4">4</span><span class="accent">+</span></div>
             <div class="about-stat-lbl">Years of Experience</div>
           </div>
         </div>
@@ -2018,6 +2002,39 @@
         updateHorizontalScroll();
         setTimeout(updateHorizontalScroll, 100);
       }
+    })();
+  </script>
+  <script>
+    (() => {
+      const counters = document.querySelectorAll('.about-stat-count');
+      const stats = document.querySelector('.about-stats-grid');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!stats || !counters.length || reduceMotion || !('IntersectionObserver' in window)) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+
+        counters.forEach((counter) => {
+          const target = Number(counter.dataset.countTo);
+          const duration = 1600;
+          const startTime = performance.now();
+
+          function updateCount(now) {
+            const progress = Math.min((now - startTime) / duration, 1);
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            counter.textContent = String(Math.round(target * easedProgress));
+
+            if (progress < 1) requestAnimationFrame(updateCount);
+          }
+
+          counter.textContent = '0';
+          requestAnimationFrame(updateCount);
+        });
+      }, { threshold: 0.35 });
+
+      observer.observe(stats);
     })();
   </script>
   <script src="assets/js/lenis.min.js"></script>
