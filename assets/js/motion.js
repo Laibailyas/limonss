@@ -531,6 +531,7 @@
         }
         setTimeout(() => {
           preloader.remove();
+          window.dispatchEvent(new Event('limons:preloader-complete'));
         }, 800);
       }, 240);
     }

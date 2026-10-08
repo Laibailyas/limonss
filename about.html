@@ -2012,29 +2012,31 @@
 
       if (!stats || !counters.length || reduceMotion || !('IntersectionObserver' in window)) return;
 
-      const observer = new IntersectionObserver((entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        observer.disconnect();
+      window.addEventListener('limons:preloader-complete', () => {
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
 
-        counters.forEach((counter) => {
-          const target = Number(counter.dataset.countTo);
-          const duration = 1600;
-          const startTime = performance.now();
+          counters.forEach((counter) => {
+            const target = Number(counter.dataset.countTo);
+            const duration = 1600;
+            const startTime = performance.now();
 
-          function updateCount(now) {
-            const progress = Math.min((now - startTime) / duration, 1);
-            const easedProgress = 1 - Math.pow(1 - progress, 3);
-            counter.textContent = String(Math.round(target * easedProgress));
+            function updateCount(now) {
+              const progress = Math.min((now - startTime) / duration, 1);
+              const easedProgress = 1 - Math.pow(1 - progress, 3);
+              counter.textContent = String(Math.round(target * easedProgress));
 
-            if (progress < 1) requestAnimationFrame(updateCount);
-          }
+              if (progress < 1) requestAnimationFrame(updateCount);
+            }
 
-          counter.textContent = '0';
-          requestAnimationFrame(updateCount);
-        });
-      }, { threshold: 0.35 });
+            counter.textContent = '0';
+            requestAnimationFrame(updateCount);
+          });
+        }, { threshold: 0.35 });
 
-      observer.observe(stats);
+        observer.observe(stats);
+      }, { once: true });
     })();
   </script>
   <script src="assets/js/lenis.min.js"></script>
